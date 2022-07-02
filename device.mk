@@ -300,6 +300,7 @@ PRODUCT_PACKAGES += \
 # Overlays
 PRODUCT_PACKAGES += \
    CarrierConfigOverlayVeux \
+   CutoutRingServiceVeux \
    DialerOverlayVeux \
    FrameworksResOverlayVeux \
    SettingsOverlayVeux \
