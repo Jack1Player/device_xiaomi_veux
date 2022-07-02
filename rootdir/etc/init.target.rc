@@ -103,6 +103,10 @@ on post-fs-data
 #ExtR HONGMI-90116,wufa@wingtech.com,add,20210908,add mi_thermal
     mkdir /data/vendor/thermal 0771 root system
     mkdir /data/vendor/thermal/config 0771 root system
+    chmod 0664 /sys/class/thermal/thermal_message/sconfig
+    chown system system /sys/class/thermal/thermal_message/sconfig
+    chmod 0666 /sys/class/thermal/thermal_message/temp_state
+    chown system system /sys/class/thermal/thermal_message/temp_state
     chmod 0644 /dev/elliptic0
     chmod 0644 /dev/elliptic1
     chmod 0660 /dev/ir_spi
@@ -113,6 +117,8 @@ on early-boot
     start vendor.sensors
 
 on boot
+    start mi_thermald
+    
     # Set xiaomi touch permissions
     chown system system /dev/xiaomi-touch
     chmod 0660 /dev/xiaomi-touch
@@ -158,9 +164,6 @@ on boot
     chmod 0644 /mnt/vendor/persist/audio/aw_cali.bin
     chmod 0644 /mnt/vendor/persist/audio/fsm_calib.bin
 
-    #ExtR HONGMI-90116,wufa@wingtech.com,add,20210908,add mi_thermal
-    chown system system /sys/class/thermal/thermal_message/sconfig
-
 # add dual
     mkdir /mnt/vendor/persist/camera 0777 system system
     chmod 0666 /mnt/vendor/persist/camera/rear_dc_cal_wu.bin
@@ -190,9 +193,6 @@ on charger
     start vendor.power_off_alarm
     setprop sys.usb.controller 4e00000.dwc3
     setprop sys.usb.configfs 1
-    #+ExtR HONGMI-90116,wufa@wingtech.com,add,20210908,add mi_thermal
-    start mi_thermald
-    #-ExtR HONGMI-90116,wufa@wingtech.com,add,20210908,add mi_thermal
 
 #+ExtR HONGMI-90162,zhangb02@wingtech.com,add,20211003,add misound
 service audioshell_service /vendor/bin/audioshell_service
@@ -230,8 +230,6 @@ service vendor.per_proxy /vendor/bin/pm-proxy
 service vendor.mdm_launcher /vendor/bin/sh /vendor/bin/init.mdm.sh
     class core
     oneshot
-
-
 
 on property:init.svc.vendor.per_mgr=running
     start vendor.per_proxy
